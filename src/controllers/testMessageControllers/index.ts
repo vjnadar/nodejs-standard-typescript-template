@@ -1,16 +1,17 @@
 import { NextFunction, Request, Response } from "express";
-import { Document, InsertOneResult, ObjectId, UpdateResult, WithId } from "mongodb";
+import { DeleteResult, Document, InsertOneResult, ObjectId, UpdateResult, WithId } from "mongodb";
 
 import TestMessageModel from "../../models/TestMessageModel";
-import { errorTypes } from "../../utilities/enums/ErrorTypes";
+import { TestMessageDocumentType } from "../../models/types";
 import { throwError } from "../../utilities/errorHandlers";
+import { errorTypes } from "../../utilities/errorHandlers/enums";
 import { ResponseFromDatabase } from "../../utilities/errorHandlers/types";
 
 export async function saveTestMessageController(request: Request, response: Response, next: NextFunction) {
     const message: string = request.body.message;
     const newTestModel = new TestMessageModel(undefined, message);
     try {
-        const saveResult: InsertOneResult<Document> = (await newTestModel.save()) as InsertOneResult<Document>;
+        const saveResult: InsertOneResult<TestMessageDocumentType> = (await newTestModel.save()) as InsertOneResult<Document>;
         throwError({ type: errorTypes.GENERAL_ERROR }, saveResult);
         response.status(201).json({ message: "The test message was saved successfully!", insertedId: saveResult.insertedId });
     } catch (error) {
@@ -20,7 +21,7 @@ export async function saveTestMessageController(request: Request, response: Resp
 export async function getTestMessageController(request: Request, response: Response, next: NextFunction) {
     const _id = new ObjectId(request.params._id);
     try {
-        const result: WithId<Document> | null = await TestMessageModel.getTestMessage(_id);
+        const result: WithId<TestMessageDocumentType | null> | null = await TestMessageModel.getTestMessage(_id);
         throwError({ type: errorTypes.GENERAL_ERROR }, result as ResponseFromDatabase);
         response.status(200).json({ message: "The test message was retrieved successfully!", result });
     } catch (error) {
@@ -42,7 +43,7 @@ export async function updateTestMessageController(request: Request, response: Re
 export async function deleteTestMessageController(request: Request, response: Response, next: NextFunction) {
     const _id = new ObjectId(request.params._id);
     try {
-        const deleteResult = await TestMessageModel.deleteTestMessage(_id);
+        const deleteResult: DeleteResult = await TestMessageModel.deleteTestMessage(_id);
         throwError({ type: errorTypes.DELETE_ONE }, deleteResult);
         response.status(200).json({ message: "The message was deleted successfully!" });
     } catch (error) {

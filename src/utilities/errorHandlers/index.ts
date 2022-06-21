@@ -1,7 +1,9 @@
+import Joi from "joi";
+
 import { ErrorType } from "../../generalTypes";
 import { errorTypes } from "./enums";
 import { ErrorHolder, ResponseFromDatabase } from "./types";
-export function throwError(errorHolder: ErrorHolder, response: ResponseFromDatabase): void | ErrorType {
+export function throwError(errorHolder: ErrorHolder, response: ResponseFromDatabase | Joi.ValidationError | undefined): void | ErrorType {
     switch (errorHolder.type) {
         case errorTypes.GENERAL_ERROR: {
             if (!response) {
@@ -19,62 +21,74 @@ export function throwError(errorHolder: ErrorHolder, response: ResponseFromDatab
             break;
         }
         case errorTypes.INSERT_ONE: {
-            if (response.insertedCount !== undefined && response.insertedCount !== 1) {
+            if ((response as ResponseFromDatabase)?.insertedCount !== undefined && (response as ResponseFromDatabase)?.insertedCount !== 1) {
                 const error: ErrorType = createError(errorHolder.message ?? "The insertion operation failed.", 500);
 
                 throw error;
-            } else if (response.name === "MongoError") {
+            } else if (response?.name === "MongoError") {
                 const error: ErrorType = createError("MongoDb error. Check database", 500);
                 throw error;
             }
             break;
         }
         case errorTypes.INSERT_ONE_OBJECT_WITH_IMAGES: {
-            if (response.insertedCount !== undefined && response.insertedCount !== 1) {
+            if ((response as ResponseFromDatabase).insertedCount !== undefined && (response as ResponseFromDatabase).insertedCount !== 1) {
                 const error: ErrorType = createError(errorHolder.message ?? "The insertion operation failed.", 500);
 
                 return error;
-            } else if (response.name === "MongoError") {
+            } else if ((response as ResponseFromDatabase).name === "MongoError") {
                 const error: ErrorType = createError("MongoDb error. Check database", 500);
                 return error;
             }
             break;
         }
         case errorTypes.UPDATE_ONE: {
-            if (response.modifiedCount !== undefined && response.modifiedCount !== 1 && response.matchedCount !== 1) {
+            if (
+                (response as ResponseFromDatabase).modifiedCount !== undefined &&
+                (response as ResponseFromDatabase).modifiedCount !== 1 &&
+                (response as ResponseFromDatabase).matchedCount !== 1
+            ) {
                 const error: ErrorType = createError(errorHolder.message ?? "The update operation failed.", 500);
                 throw error;
-            } else if (response.name === "MongoError") {
+            } else if ((response as ResponseFromDatabase).name === "MongoError") {
                 const error: ErrorType = createError("MongoDb error. Check database", 500);
                 throw error;
             }
             break;
         }
         case errorTypes.UPDATE_MANY: {
-            if (response?.modifiedCount !== undefined && !(response.modifiedCount >= 1) && response?.result?.ok === 1) {
+            if (
+                (response as ResponseFromDatabase)?.modifiedCount !== undefined &&
+                !(((response as ResponseFromDatabase)?.modifiedCount as number) >= 1) &&
+                (response as ResponseFromDatabase)?.result?.ok === 1
+            ) {
                 const error: ErrorType = createError(errorHolder.message ?? "The update operation failed due to an inappropriate query.", 500);
                 throw error;
-            } else if (response.name === "MongoError") {
+            } else if ((response as ResponseFromDatabase).name === "MongoError") {
                 const error: ErrorType = createError("MongoDb error. Check database", 500);
                 throw error;
             }
             break;
         }
         case errorTypes.DELETE_ONE: {
-            if (response.deletedCount !== undefined && response.deletedCount !== 1) {
+            if ((response as ResponseFromDatabase).deletedCount !== undefined && (response as ResponseFromDatabase).deletedCount !== 1) {
                 const error: ErrorType = createError(errorHolder.message ?? "The deletion operation failed.", 500);
                 throw error;
-            } else if (response.name === "MongoError") {
+            } else if ((response as ResponseFromDatabase).name === "MongoError") {
                 const error: ErrorType = createError("MongoDb error. Check database", 500);
                 throw error;
             }
             break;
         }
         case errorTypes.DELETE_MANY: {
-            if (response.deletedCount !== undefined && !(response.deletedCount >= 1) && response?.result?.ok === 1) {
+            if (
+                (response as ResponseFromDatabase).deletedCount !== undefined &&
+                !(((response as ResponseFromDatabase)?.deletedCount as number) >= 1) &&
+                (response as ResponseFromDatabase)?.result?.ok === 1
+            ) {
                 const error: ErrorType = createError(errorHolder.message ?? "The deletion operation failed due to inappropriate query", 500);
                 throw error;
-            } else if (response.name === "MongoError") {
+            } else if ((response as ResponseFromDatabase).name === "MongoError") {
                 const error: ErrorType = createError("MongoDb error. Check database", 500);
                 throw error;
             }

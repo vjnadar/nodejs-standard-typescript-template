@@ -1,9 +1,9 @@
 import { DeleteResult, Document, InsertOneResult, ObjectId, UpdateResult, WithId } from "mongodb";
 
 import getDatabaseAccess from "../../databaseConnection";
-import { errorTypes } from "../../utilities/enums/ErrorTypes";
 import { throwError } from "../../utilities/errorHandlers";
-
+import { errorTypes } from "../../utilities/errorHandlers/enums";
+import { TestMessageDocumentType } from "../types";
 class TestMessageModel {
     _id: ObjectId | undefined;
     message: string;
@@ -12,13 +12,15 @@ class TestMessageModel {
         this._id = _id ? _id : undefined;
         this.message = message;
     }
-    async save(): Promise<UpdateResult | InsertOneResult<Document>> {
+    async save(): Promise<UpdateResult | InsertOneResult<TestMessageDocumentType>> {
         const database = await getDatabaseAccess();
         if (!this._id) {
             const documentObjectToBeInserted = {
                 message: this.message
             };
-            const result: InsertOneResult<Document> = await database.collection(TestMessageModel.collectionName).insertOne(documentObjectToBeInserted);
+            const result: InsertOneResult<TestMessageDocumentType> = await database
+                .collection(TestMessageModel.collectionName)
+                .insertOne(documentObjectToBeInserted);
             throwError({ type: errorTypes.INSERT_ONE }, result);
             return result;
         } else {

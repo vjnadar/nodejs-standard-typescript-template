@@ -6,7 +6,9 @@
     "scripts": {
         "build": "npx tsc",
         "dev": "concurrently \"npx tsc --watch\" \"nodemon -q build/server.js\"",
-        "test": "jest --watchAll --verbose --detectOpenHandles --coverage",
+        "test:build": "tsc",
+        "test:run": "jest --watchAll --verbose --detectOpenHandles --coverage",
+        "test": "concurrently npm:test:*",
         "start:build": "tsc -w",
         "start:run": "nodemon build/server.js",
         "start": "concurrently npm:start:*"
@@ -19,6 +21,7 @@
     "dependencies": {
         "dotenv": "^16.0.1",
         "express": "^4.18.1",
+        "joi": "^17.6.0",
         "mongodb": "^4.6.0",
         "winston": "^3.7.2"
     },
