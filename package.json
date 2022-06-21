@@ -1,0 +1,50 @@
+{
+    "name": "nodejs-standard-typescript-template",
+    "version": "0.0.1",
+    "description": "a simple node-js project template written in Typescript",
+    "main": "server.js",
+    "scripts": {
+        "build": "npx tsc",
+        "dev": "concurrently \"npx tsc --watch\" \"nodemon -q build/server.js\"",
+        "test": "jest --watchAll --verbose --detectOpenHandles --coverage",
+        "start:build": "tsc -w",
+        "start:run": "nodemon build/server.js",
+        "start": "concurrently npm:start:*"
+    },
+    "engines": {
+        "node": ">=8.0.0"
+    },
+    "author": "V.J.Nadar",
+    "license": "ISC",
+    "dependencies": {
+        "dotenv": "^16.0.1",
+        "express": "^4.18.1",
+        "mongodb": "^4.6.0",
+        "winston": "^3.7.2"
+    },
+    "devDependencies": {
+        "@types/dotenv": "^8.2.0",
+        "@types/express": "^4.17.13",
+        "@types/jest": "^27.5.1",
+        "@types/node": "^17.0.33",
+        "@types/supertest": "^2.0.12",
+        "@types/winston": "^2.4.4",
+        "@typescript-eslint/eslint-plugin": "^5.23.0",
+        "@typescript-eslint/parser": "^5.23.0",
+        "concurrently": "^7.2.2",
+        "eslint": "^8.15.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-import": "^2.26.0",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-prettier": "^4.0.0",
+        "eslint-plugin-simple-import-sort": "^7.0.0",
+        "eslint-plugin-unicorn": "^42.0.0",
+        "jest": "^28.1.1",
+        "nodemon": "^2.0.16",
+        "prettier": "^2.6.2",
+        "supertest": "^6.2.3",
+        "ts-jest": "^28.0.5",
+        "ts-node": "^10.8.1",
+        "typescript": "^4.6.4"
+    }
+}
