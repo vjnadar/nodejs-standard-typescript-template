@@ -1,0 +1,79 @@
+{
+    "extends": ["plugin:@typescript-eslint/recommended", "plugin:prettier/recommended", "plugin:node/recommended", "plugin:unicorn/recommended"],
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [".js", ".ts"],
+                "paths": ["src"]
+            }
+        }
+    },
+    "parserOptions": {
+        "ecmaVersion": 2020,
+        "sourceType": "module",
+        "parser": "@typescript-eslint/parser",
+        "project": "tsconfig.json"
+    },
+    "plugins": ["@typescript-eslint", "simple-import-sort", "prettier", "import", "unicorn", "node"],
+    "env": {
+        "browser": false,
+        "node": true,
+        "es6": true,
+        "jest": true
+    },
+    "rules": {
+        "node/no-unsupported-features/es-syntax": ["error", { "ignores": ["modules"] }],
+        "node/no-missing-import": [
+            "error",
+            {
+                "allowModules": [],
+                "resolvePaths": ["/path/to/a/modules/directory"],
+                "tryExtensions": [".js", ".json", ".node", ".ts"]
+            }
+        ],
+        "unicorn/filename-case": [
+            "error",
+            {
+                "cases": {
+                    "camelCase": true,
+                    "pascalCase": true
+                }
+            }
+        ],
+        "import/no-extraneous-dependencies": [2, { "devDependencies": true }],
+        "import/extensions": ["error", "never"],
+        "import/prefer-default-export": 0,
+        "import/no-anonymous-default-export": 0,
+        "import/no-unresolved": 1,
+        "simple-import-sort/imports": "error",
+        "simple-import-sort/exports": "error",
+        "sort-imports": "off",
+        "import/order": "off",
+        "no-shadow": "off",
+        "no-use-before-define": "off",
+        "@typescript-eslint/no-shadow": "error",
+        "@typescript-eslint/ban-ts-comment": 0,
+        "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/prefer-optional-chain": "warn",
+        "@typescript-eslint/no-inferrable-types": "warn",
+        "@typescript-eslint/prefer-nullish-coalescing": "warn",
+        "no-nested-ternary": "off",
+        "prettier/prettier": [
+            "error",
+            {
+                "semi": true,
+                "trailingComma": "none",
+                "singleQuote": false,
+                "printWidth": 160,
+                "tabWidth": 4,
+                "endOfLine": "auto"
+            }
+        ],
+        "node/no-unpublished-import": [
+            "error",
+            {
+                "allowModules": ["supertest"]
+            }
+        ]
+    }
+}

@@ -1,0 +1,9 @@
+build/*
+!build/server.js
+coverage/
+node_modules/
+.env
+info.log
+package-lock.json
+uncaughtexception.log
+.vscode

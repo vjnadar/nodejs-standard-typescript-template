@@ -1,0 +1,21 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const server = (0, express_1.default)();
+require("./routes");
+const dotenv_1 = require("dotenv");
+const listener_1 = __importDefault(require("./startup/listener"));
+const logger_1 = __importDefault(require("./startup/logger"));
+const mainErrorHandler_1 = __importDefault(require("./startup/mainErrorHandler"));
+const routesStartup_1 = __importDefault(require("./startup/routesStartup"));
+const setHeader_1 = __importDefault(require("./startup/setHeader"));
+(0, dotenv_1.config)();
+(0, logger_1.default)();
+(0, setHeader_1.default)(server);
+(0, routesStartup_1.default)(server);
+(0, mainErrorHandler_1.default)(server);
+(0, listener_1.default)(server);
+// module.exports = _server;

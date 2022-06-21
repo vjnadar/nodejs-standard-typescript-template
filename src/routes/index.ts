@@ -1,0 +1,1 @@
+export { testRouter } from "./testMessageRouter";
