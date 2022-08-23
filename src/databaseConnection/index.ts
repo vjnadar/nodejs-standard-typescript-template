@@ -20,9 +20,6 @@ async function getDatabaseAccess(): Promise<Db> {
         winston.exceptions.handle(new winston.transports.File({ filename: "dbexception.log" }));
         console.error(error);
     }
-    //finally {
-    //     client.close();
-    // }
     return client.db();
 }
 export function getClient(): MongoClient {
